@@ -6,3 +6,8 @@ from .models import *
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(HouseDetails)
+class HouseDetailsAdmin(admin.ModelAdmin):
+    pass

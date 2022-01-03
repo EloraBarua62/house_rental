@@ -1,0 +1,19 @@
+<section>
+  <div class="row">
+    <div class="col-sm-4">
+        <h4 class="text-center alert alert-info">Create Your Account</h4>
+        <form action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" class="btn btn-success" value="Add">
+        </form>
+        {% if messages %}
+        {% for msg in messages %}
+          <h2 {% if msg.tags %} class="{{msg.tags}}" {% endif %}>
+             {{msg}} 
+          </h2>
+        {% endfor %}
+        {% endif %}
+    </div>
+  </div>
+</section>

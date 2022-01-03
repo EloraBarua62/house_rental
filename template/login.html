@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> 
+</head>
+<body>
+  <div class="about-section">
+    <h1 class="text-center">Please Log In</h1>
+
+     <div class="row">
+       <div class="col-lg-7 m-auto">
+           <div class="card mt-5 color bgcolor">
+
+                <div class="card-title text-center mt-3">
+                    <img src="/static/image/use_logo.png" width="100px" height="100px">
+                </div>
+
+                <div class="card-body">
+
+                   <form method="post" class="form-group">
+                      {% csrf_token %}
+                      {{form.as_p}}
+                      {% comment %} <input type="text" name="username" placeholder="User">
+                      <input type="text" name="password" placeholder="Password"> {% endcomment %}
+                      <button type="submit" class="btn btn-success">Get started</button>
+                    </form>
+                    {% if messages %}
+                    {% for msg in messages %}
+                    <h2 {% if msg.tags %} class="{{msg.tags}}" {% endif %}>
+                        {{msg}} 
+                    </h2>
+                    {% endfor %}
+                        <a href="{% url 'houseinfo' %}">Are you owner?</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+     </div>
+ </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

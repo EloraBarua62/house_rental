@@ -1,0 +1,37 @@
+<h1>House Details List</h1>
+<table>
+    <tr>
+        <th>House ID</th>
+        <th>House Name</th>
+        <th>Size</th>
+        <th>Total Room</th>
+        <th>Bed</th>
+        <th>Parking Lot</th>
+        <th>Floor</th>
+        <th>Location</th>
+        <th>Price</th>
+        <th>Images</th>
+    </tr>
+    {% for list in houselist %}
+        <tr>
+            <td>{{ list.house_id }}</td>
+            <td>{{ list.house_name }}</td>
+            <td>{{ list.size }}</td>
+            <td>{{ list.total_room }}</td>
+            <td>{{ list.bed }}</td>
+            <td>{{ list.parking_lot }}</td>
+            <td>{{ list.floor }}</td>
+            <td>{{ list.location }}</td>
+            <td>{{ list.price }}</td>
+            <td>{{ list.house_image }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <div class="col-lg-3 col-md-6 col-sm-12">#}
+{#                #}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
