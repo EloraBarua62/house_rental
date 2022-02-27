@@ -7,11 +7,47 @@
                      alt="...">
                 <div class="card-body">
                     <h4 style="font-size: 17px;" class="card-title mt-1">{{ detail.size }}</h4>
+                    <h4 style="font-size: 17px;" class="card-title mt-1">{{ detail.price }}</h4>
                     <h3 style="color: rgb(16, 52, 107)" class="card-subtitle mt-1">{{ detail.location }}</h3>
                 </div>
             </div>
         </div>
 
     </div>
+</div>
+
+
+
+<div class="container">
+      <h1>Recommended houses nearby you</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        {% if house_list %}
+
+            {% for home in house_list %}
+                <div class="col-md-6">
+                    <div class="card m-3"
+                         style="width: 18rem;height: 33rem; box-shadow: 4px 4px #32045b; border-radius: 25px 15px;">
+                        <img src="{{ home.house_image.url }}" style="height: 250px; width: 200px;"
+                             class="card-img-top-right"
+                             alt="...">
+                        <div class="card-body">
+                            <h3 style="font-size: 23px;" class="card-title mt-1">{{ home.house_name }}</h3>
+                            <h3 style="color: black" class="card-subtitle mt-1">{{ home.size }}</h3>
+                            <h3 style="color: black" class="card-text mt-1">{{ home.location }}</h3>
+                            <h3 style="color: black" class="card-text mt-1">{{ home.price }}</h3>
+                                <hr>
+                            <a href="{% url 'details' home.pk %}" class="text-top-left btn btn-primary"
+                               role="button">Details</a>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% endif %}
+    </div>
+
+</div>
 
 </div>

@@ -30,3 +30,8 @@ class HouseInfoForm(forms.ModelForm):
         #     'parking_lot': forms.TextInput(attrs={'class': 'form-control'}),
         #     'floor': forms.TextInput(attrs={'class': 'form-control'})
         # }
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(max_length=100)
+

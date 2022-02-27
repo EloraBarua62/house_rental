@@ -1,17 +1,22 @@
+import json
+
 from django.shortcuts import render
 from django.contrib import messages
-from .forms import HouseInfoForm, RegistrationForm
+from .forms import HouseInfoForm, RegistrationForm, SearchForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from .models import HouseDetails
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect
 
 
 # Create your views here.
 def frontpage(request):
-    house_list = HouseDetails.objects.all()
-    return render(request, 'frontpage.html', {'house_list': house_list})
-    #return render(request, 'frontpage.html')
+    return render(request, 'frontpage.html')
+
+
+def house_search(request):
+    return render(request, 'house_search.html')
 
 
 def reg_form(request):
@@ -27,6 +32,9 @@ def reg_form(request):
     return render(request, 'regform.html', {'form': fm})
 
 
+login_res = 1
+
+
 def login_form(request):
     if request.method == 'POST':
         fm = AuthenticationForm(request=request, data=request.POST)
@@ -37,8 +45,11 @@ def login_form(request):
         user = authenticate(username=username, password=password)
         # print(user)
         if user is not None:
+            global login_res
+            login_res = 0
             login(request, user)
             messages.info(request, f"Log In Successfully!!")
+            return redirect('/')
     else:
         fm = AuthenticationForm()
     return render(request, 'login.html', {'form': fm})
@@ -71,24 +82,54 @@ def houseinfo(request):
 
 
 # Autocomplete search
-def autosuggest(request):
-    query = request.GET.get('term')
-    print(request.GET)
-    mylist = []
-    if query:
-        query_set = HouseDetails.objects.filter(location__icontains=query)
+# def autosuggest(request):
+#     query = request.GET.get('term')
+#     print(request.GET)
+#     mylist = []
+#     if query:
+#         query_set = HouseDetails.objects.filter(location__icontains=query)
+#
+#         for address in query_set:
+#             mylist.append(address.location)
+#
+#     return JsonResponse(mylist, safe=False)
 
-        for address in query_set:
-            mylist.append(address.location)
-
-    return JsonResponse(mylist, safe=False)
+house_list = []
 
 
-def house_search(request):
-    # search = HouseDetails.objects.filter(location=True)
-    return render(request, 'house_search.html')
+def show_house(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            global house_list
+            house_list = HouseDetails.objects.filter(location__icontains=query).order_by('size', 'price')
+            return render(request, 'show_house.html',
+                          {'house_list': house_list, 'query': query, 'login_res': login_res})
+    return HttpResponseRedirect('/')
+
+
+####### AutoSearch API ######
+def auto_house(request):
+    if request.is_ajax():
+        q = request.GET.get('term')
+        places = HouseDetails.objects.filter(location__icontains=q)
+        results = []
+        for pl in places:
+            place_json = {}
+            place_json = pl.location
+            results.append(place_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
 
 
 def house_details(request, pk):
     detail = HouseDetails.objects.get(id=pk)
-    return render(request, 'details.html', {'detail': detail})
+    min_range = detail.price-2000
+    max_range = detail.price+2000
+    global house_list
+    house_list = house_list.filter(price__range=[min_range, max_range])
+    return render(request, 'details.html', {'detail': detail, 'house_list': house_list})
