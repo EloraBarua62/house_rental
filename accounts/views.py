@@ -9,10 +9,18 @@ from .models import HouseDetails
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
 
+# check login and logout
+login_res = 1
+
 
 # Create your views here.
 def frontpage(request):
     return render(request, 'frontpage.html')
+
+
+# index html
+def index(request):
+    return render(request, 'index.html', {'login_res': login_res})
 
 
 def house_search(request):
@@ -30,9 +38,6 @@ def reg_form(request):
     else:
         fm = RegistrationForm()
     return render(request, 'regform.html', {'form': fm})
-
-
-login_res = 1
 
 
 def login_form(request):
@@ -53,6 +58,13 @@ def login_form(request):
     else:
         fm = AuthenticationForm()
     return render(request, 'login.html', {'form': fm})
+
+
+def logout(request):
+    global login_res
+    login_res = 1
+    logout(request)
+    return HttpResponseRedirect('/index/')
 
 
 def houseinfo(request):

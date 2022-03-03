@@ -27,6 +27,12 @@ class User(AbstractUser):
 
 class HouseDetails(models.Model):
     # password = None
+    MY_CHOICES = (
+        ('Flat', 'Flat'),
+        ('Duplex', 'Duplex'),
+        ('Commercial space', 'Commercial space'),
+        ('Sublet', 'Sublet')
+    )
     house_id = models.IntegerField(verbose_name='House ID', null=True, blank=True, unique=True)
     house_name = models.CharField(max_length=50, verbose_name='House Name', blank=True, default='')
     size = models.IntegerField(verbose_name='Size', null=True, blank=True)
@@ -37,7 +43,7 @@ class HouseDetails(models.Model):
     location = models.CharField(max_length=250, verbose_name='Location', blank=True)
     price = models.IntegerField(verbose_name='Rent', null=True, blank=True)
     house_image = models.ImageField(verbose_name='Add House Image', null=True, blank=True, upload_to=upload_image)
-
+    House_type = models.CharField(max_length=20, verbose_name='House Type', default=False, choices=MY_CHOICES)
     # house = objects.get(house_id=house_id)
     # house.set_unusable_password()
     # def house_details(self, password=None):

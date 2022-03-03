@@ -1,0 +1,97 @@
+body{
+    font-family: 'Domine', serif;
+    font-family: 'Fira Sans', sans-serif;
+    font-family: 'Libre Baskerville', serif;
+    font-family: 'Lobster', cursive;
+    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Serif 4', sans-serif;
+}
+
+.resize{
+    width: 3rem;
+}
+
+.title-resize{
+    font-size: 50px;
+    font-weight: bolder;
+}
+.nav-item-resize{
+    font-weight: 500;
+}
+.search-bar{
+    width: 450px;
+    height: 70px;
+    border: solid 3px grey;
+}
+.search-bar input{
+    border: none;
+    outline-color: white;
+}
+#search{
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.904);
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+    text-decoration: none;
+    color: rgb(155, 152, 152);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.parent{
+    position: relative;
+}
+
+.child{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+}
+.test{
+    color: black;
+}
+
+/* .round{
+    width: 50px;
+    height: 200px;
+    border: solid 2px black;
+    border-radius: 50%;
+    background-color: gray;
+} */
+.icon-div{
+    position: absolute;
+    background-color: gray;
+    width: 50px;
+    height: 50px;
+    border: none;
+    
+}
+.round:hover .round-hover{
+    display: block;
+    width: 250px;
+    background-color: rgba(128, 128, 128, 0.39);
+    font-weight: 900;
+    margin-right: 12px;
+}
+
+.round:hover .round-image{
+    display: none;
+}
+
+.round-image{
+    position: absolute;
+}
+.round-hover{
+    display: none;
+    position: absolute;
+    top: 0;
+}
+
+
+
+
+
+

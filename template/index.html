@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Rental</title>
+
+    {#  Static file added  #}
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!--Bootstrap link-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!--Font link-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Domine&family=Fira+Sans:ital@1&family=Libre+Baskerville:wght@700&family=Lobster&family=Open+Sans:wght@300&family=Source+Serif+4:wght@900&display=swap"
+            rel="stylesheet">
+
+
+    <!--AUTO SEARCH link section-->
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+    <!-- jQuery UI !-->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+</head>
+
+<body>
+<!--Header section-->
+<header>
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand title-resize" href="#"><img class="resize d-inline-block align-middle me-2"
+                                                               src="/media/images/home_logo.png" alt="">HOMEY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-item-resize">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'regform' %}">Sign up</a>
+                    </li>
+                    {% if login_res == 1 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Sign in</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Sign out</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!--image slider/carosel-->
+    <section class="container mb-5">
+        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/media/images/Apartment1.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/media/images/Apartment2.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/media/images/Duplex1.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/media/images/Duplex2.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/media/images/Hall1.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/media/images/Hall2.jpg" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+</header>
+
+<main>
+    <!--Search bar-->
+    <section class="container my-5 d-flex justify-content-center">
+        <div class="search-bar rounded-pill ui-widget">
+            <form action="/show-house/" method="post" class="d-flex justify-content-around my-2">
+                {% csrf_token %}
+                <input id="query" name="query" type="text" class="ms-3 input search-input"
+                       placeholder="Where do you wanna go?">
+                <button id="search" class="ms-auto me-2 search-btn"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+    </section>
+
+
+    <!--Collage Area-->
+
+    <section class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="row mb-4 parent">
+                    <h1 class="child">Dhaka</h1>
+                    <img class="img-fluid" src="/media/images/Division/masba-molla-Cdwi5n7Gwes-unsplash.jpg" alt="">
+                    <div class="round">
+                        <img class="round-image bottom-0 end-0" style="width: 80px; height: 56px;"
+                             src="/media/images/circle-arrow-left-solid.svg" alt="">
+
+                        <div class="round-hover position-absolute bottom-0 end-0">
+                            <ul>
+                                <li>Flat :</li>
+                                <li>Duplex :</li>
+                                <li>Commercial space :</li>
+                                <li>Sub-let :</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4 parent">
+                    <img class="img-fluid" src="/media/images/Division/Beach_ctg.jpg" alt="">
+                    <h1 class="child">Chittagong</h1>
+                </div>
+                <div class="row mb-4 parent">
+                    <img class="img-fluid" src="/media/images/Division/Ratagul_sylt.jpg" alt="">
+                    <h1 class="child">Sylhet</h1>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row mb-4 parent">
+                    <img class="img-fluid" src="/media/images/Division/Jaflong_syl.jpg" alt="">
+                    <h1 class="child">Sylhet</h1>
+                </div>
+                <div class="row mb-4 parent">
+                    <img class="img-fluid" src="/media/images/Division/Paharpur_raj.jpg" alt="">
+                    <h1 class="child">Rajshahi</h1>
+                </div>
+                <div class="row mb-4 parent">
+                    <img class="img-fluid" src="/media/images/Division/Shundorban_Khulna.jpg" alt="">
+                    <h1 class="child">Khulna</h1>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row mb-4 parent">
+                    <img class="img-fluid" src="/media/images/Division/Rangpur_Taj_palace.jpg" alt="">
+                    <h1 class="child">Rangpur</h1>
+                </div>
+                <div class="row mb-4 parent">
+                    <img class="img-fluid" src="/media/images/Division/Shoshi_Lodge_Mymensingh.jpg" alt="">
+                    <h1 class="child">Mymensingh</h1>
+                </div>
+                <div class="row mb-4 parent">
+                    <img class="img-fluid" src="/media/images/Division/Miah_Bari_Mosque,_Barisal.jpg" alt="">
+                    <h1 class="child">Barishal</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</main>
+
+<!--Bootstrap script link-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+<!--Icon script link-->
+<script src="https://kit.fontawesome.com/aaa6db36b3.js" crossorigin="anonymous"></script>
+
+
+<!--AUTO SEARCH script section-->
+<!--Jquery UI-->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+
+<!--Autocomplete-->
+<script>
+    $(function () {
+        $('#query').autocomplete({
+            source: "/auto_house/",
+            select: function (event, ui) { //item selected
+                AutoCompleteSelectHandler(event, ui)
+            },
+        });
+    });
+
+    function AutoCompleteSelectHandler(event, ui) {
+        const selectedObj = ui.item;
+    }
+</script>
+</body>
+
+</html>
