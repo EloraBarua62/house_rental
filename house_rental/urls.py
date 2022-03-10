@@ -26,12 +26,14 @@ urlpatterns = [
                   path('regform/', views.reg_form, name='regform'),
                   path('houseinfo/', views.houseinfo, name='houseinfo'),
                   path('login/', views.login_form, name='login'),
-                  path('logout/', views.logout, name='logout'),
-                  # path('houselist/', views.house_listview, name='houselist'),
-                  # path('', search_location, name='location')
-                  # path('autosuggest/', views.autosuggest, name='autosuggest'),
-                  path('house-search/', views.house_search, name='house_search'),
+                  path('logout/', views.logout_form, name='logout'),
+                  path('map/', views.mapview, name='map'),
                   path('show-house/', views.show_house, name='show_house'),
                   path('auto_house/', views.auto_house, name='auto_house'),
-                  path('details/<int:pk>/', views.house_details, name='details')
+                  path('details/<int:pk>/', views.house_details, name='details'),
+                  path('submit_review/<int:p_id>/', views.submit_review, name='submit_review'),
+                  # path('rate_review/', views.rate_review, name='rate_review'),
+
+                  # rating and review's url for js
+                  # path('save/<int:pid>', views.save, name='save'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

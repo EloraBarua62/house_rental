@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core import validators
-from .models import User, HouseDetails
+from .models import User, HouseDetails, HouseRate, ShowMap, AdminHouse
 
 
 class RegistrationForm(UserCreationForm):
@@ -32,6 +32,25 @@ class HouseInfoForm(forms.ModelForm):
         # }
 
 
+class AdminHouseForm(forms.ModelForm):
+    class Meta:
+        model = AdminHouse
+        fields = "__all__"
+
+
 class SearchForm(forms.Form):
     query = forms.CharField(max_length=100)
 
+
+class HouseRateForm(forms.ModelForm):
+    class Meta:
+        model = HouseRate
+        fields = "__all__"
+
+
+class ShowMapForm(forms.ModelForm):
+    address = forms.CharField(label='')
+
+    class Meta:
+        model = ShowMap
+        fields = ['address', ]

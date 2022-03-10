@@ -11,3 +11,18 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(HouseDetails)
 class HouseDetailsAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(AdminHouse)
+class AdminHouseAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(HouseRate)
+class HouseRateAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ShowMap)
+class ShowMapAdmin(admin.ModelAdmin):
+    pass

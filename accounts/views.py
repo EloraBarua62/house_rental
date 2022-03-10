@@ -1,11 +1,15 @@
 import json
-
+import folium
+import geocoder
+from django.db.models import Avg
 from django.shortcuts import render
 from django.contrib import messages
-from .forms import HouseInfoForm, RegistrationForm, SearchForm
+from django.urls import reverse_lazy
+
+from .forms import HouseInfoForm, RegistrationForm, SearchForm, HouseRateForm, ShowMapForm
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login
-from .models import HouseDetails
+from django.contrib.auth import authenticate, login, logout
+from .models import HouseDetails, HouseRate, ShowMap
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
 
@@ -20,11 +24,8 @@ def frontpage(request):
 
 # index html
 def index(request):
+    print(login_res)
     return render(request, 'index.html', {'login_res': login_res})
-
-
-def house_search(request):
-    return render(request, 'house_search.html')
 
 
 def reg_form(request):
@@ -54,17 +55,18 @@ def login_form(request):
             login_res = 0
             login(request, user)
             messages.info(request, f"Log In Successfully!!")
+            print(login_res)
             return redirect('/')
     else:
         fm = AuthenticationForm()
     return render(request, 'login.html', {'form': fm})
 
 
-def logout(request):
+def logout_form(request):
     global login_res
     login_res = 1
     logout(request)
-    return HttpResponseRedirect('/index/')
+    return redirect('/')
 
 
 def houseinfo(request):
@@ -81,31 +83,6 @@ def houseinfo(request):
     return render(request, 'houseinfo.html', {'form': fm})
 
 
-# def house_listview(request):
-#     houselist = HouseDetails.objects.all()
-#     # lastimage = HouseDetails.objects.last()
-#     # imagefile = lastimage.imagefile
-#     return render(request, 'houselist.html', {'houselist': houselist})
-
-
-# def show_house(request):
-#     house_list = HouseDetails.objects.all()
-#     return render(request, 'show_house.html', {'house_list': house_list})
-
-
-# Autocomplete search
-# def autosuggest(request):
-#     query = request.GET.get('term')
-#     print(request.GET)
-#     mylist = []
-#     if query:
-#         query_set = HouseDetails.objects.filter(location__icontains=query)
-#
-#         for address in query_set:
-#             mylist.append(address.location)
-#
-#     return JsonResponse(mylist, safe=False)
-
 house_list = []
 
 
@@ -116,8 +93,14 @@ def show_house(request):
             query = form.cleaned_data['query']
             global house_list
             house_list = HouseDetails.objects.filter(location__icontains=query).order_by('size', 'price')
+
+            flat = 0
+            duplex = 0
+            commercial_space = 0
+            sublet = 0
             return render(request, 'show_house.html',
-                          {'house_list': house_list, 'query': query, 'login_res': login_res})
+                          {'house_list': house_list, 'query': query, 'login_res': login_res, 'flat': flat,
+                           'duplex': duplex, 'commercial_space': commercial_space, 'sublet': sublet})
     return HttpResponseRedirect('/')
 
 
@@ -140,8 +123,116 @@ def auto_house(request):
 
 def house_details(request, pk):
     detail = HouseDetails.objects.get(id=pk)
-    min_range = detail.price-2000
-    max_range = detail.price+2000
+    print(detail, 'detail')
+    min_range = detail.price - 2000
+    max_range = detail.price + 2000
     global house_list
     house_list = house_list.filter(price__range=[min_range, max_range])
-    return render(request, 'details.html', {'detail': detail, 'house_list': house_list})
+    return render(request, 'details.html', {'house_list': house_list, 'detail': detail})
+
+
+def submit_review(request, p_id):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':
+        try:
+            print(url, p_id)
+            reviews = HouseRate.objects.get(user__id=request.user.id, product__id=p_id)
+            form = HouseRateForm(request.POST, instance=reviews)
+            print(12)
+            form.save()
+            messages.success(request, 'Thank you! Your review has been updated')
+            return redirect(reverse_lazy(url))
+        except HouseRate.DoesNotExist:
+            form = HouseRateForm(request.POST)
+            if form.is_valid():
+                data = HouseRate()
+                data.subject = form.cleaned_data['subject']
+                data.rating = form.cleaned_data['rating']
+                data.review = form.cleaned_data['review']
+                data.ip = request.META.get('REMOTE_ADDR')
+                data.p_id = p_id
+                data.user_id = request.user.id
+                data.save()
+
+                messages.success(request, 'Thank you!Your data in stored')
+                return redirect(url)
+    return redirect(url)
+
+
+def mapview(request):
+    # location = geocoder.osm('UK')
+    # lat = location.lat
+    # lng = location.lng
+    # country = location.country
+    # # create map object
+    # m = folium.Map(location=[19, -12], zoom_start=2)
+    # folium.Marker([5.594, -0.219], tooltip='CLick for more', popup='Ghana').add_to(m)
+    # folium.Marker([lat, lng], tooltip='CLick for more', popup=country).add_to(m)
+    # m = m._repr_html_()
+    # context = {
+    #     'm': m
+    # }
+
+    if request.method == 'POST':
+        form = ShowMapForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('/map')
+    else:
+        form = ShowMapForm()
+
+        # geocoder code
+    address = ShowMap.objects.all().last()
+
+    location = geocoder.osm(address)
+    lat = location.lat
+    lng = location.lng
+    country = location.country
+
+    # correct area na dily data ty add hobe na
+    # if lat == None or lng == None:
+    #     address.delete()
+    #     return HttpResponse('Your location input is invalid')
+
+    # create map for bangladesh lat,lng and location num ok
+
+    m = folium.Map(location=[23.684994, 90.356331], zoom_start=4)
+
+    folium.Marker([lat, lng], tooltip='click for more', icon=folium.Icon(color='green', icon='cloud'),
+                  popup="<strong>Bangladesh</strong>").add_to(m)
+
+    # we can want to add 8 division marker map to our creat map
+    folium.Marker(location=[24.903561, 91.873611], tooltip='click for more',
+                  icon=folium.Icon(color='red', icon='envelope'),
+                  popup="<strong>Sylhet</strong>").add_to(m)
+    folium.Marker(location=[24.098379, 90.328712], tooltip='click for more',
+                  icon=folium.Icon(color='red', icon='cloud'),
+                  popup="<strong>Dhaka</strong>").add_to(m)
+    # baki gula per day ty nity hobe
+    folium.Marker(location=[24.376930, 88.603073], tooltip='click for more',
+                  icon=folium.Icon(color='red', icon='envelope'),
+                  popup="<strong>Rajshahi</strong>").add_to(m)
+    folium.Marker(location=[22.841930, 89.558060], tooltip='click for more',
+                  icon=folium.Icon(color='red', icon='cloud'),
+                  popup="<strong>Khulna</strong>").add_to(m)
+    folium.Marker(location=[22.700411, 90.374992], tooltip='click for more',
+                  icon=folium.Icon(color='red', icon='envelope'),
+                  popup="<strong>Barishal</strong>").add_to(m)
+    folium.Marker(location=[22.330370, 91.832626], tooltip='click for more',
+                  icon=folium.Icon(color='red', icon='cloud'),
+                  popup="<strong>Chittagong</strong>").add_to(m)
+    folium.Marker(location=[24.744221, 90.403008], tooltip='click for more',
+                  icon=folium.Icon(color='red', icon='envelope'),
+                  popup="<strong>Mymensingh</strong>").add_to(m)
+    folium.Marker(location=[25.740580, 89.261139], tooltip='click for more',
+                  icon=folium.Icon(color='red', icon='cloud'),
+                  popup="<strong>Rangpur</strong>").add_to(m)
+
+    m = m._repr_html_()
+    context = {
+        'm': m,
+        'form': form,
+    }
+
+    return render(request, 'map.html', context)

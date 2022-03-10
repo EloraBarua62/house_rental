@@ -48,7 +48,6 @@ body{
     position: absolute;
     top: 20px;
     left: 20px;
-    color: white;
 }
 .test{
     color: black;
@@ -88,6 +87,14 @@ body{
     display: none;
     position: absolute;
     top: 0;
+}
+
+.unique-color{
+    color: #650000;
+}
+
+.foot_a{
+    text-decoration: none;
 }
 
 
