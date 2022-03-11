@@ -155,7 +155,7 @@
 
         {#    Review    #}
         <div class="container">
-            <form action="{% url 'submit_review' p_id=detail.id %}" method="POST">
+            <form action="{% url 'submit_review' detail.id %}" method="POST">
                 {% csrf_token %}
                 <h5>Your review : </h5>
                 <div>

@@ -1,10 +1,13 @@
 import json
+from urllib import request
+
 import folium
 import geocoder
 from django.db.models import Avg
 from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.views import View
 
 from .forms import HouseInfoForm, RegistrationForm, SearchForm, HouseRateForm, ShowMapForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -131,14 +134,32 @@ def house_details(request, pk):
     return render(request, 'details.html', {'house_list': house_list, 'detail': detail})
 
 
+# class review_submit(View):
+#     template_name = "template/details.html"
+#     template_index = 'template/frontpage.html'
+#
+#     def get(self, request):
+#         return render(request, self.template_name)
+#     def post(self, request):
+#         print(request.POST)
+#         # print(safawersdfa)
+#         review = request.POST.get('review')
+#         subject = request.POST.get('subject')
+#         rating = request.POST.get('rating')
+#         print(review,subject,rating)
+#         return render(request, self.template_name)
+
+
 def submit_review(request, p_id):
     url = request.META.get('HTTP_REFERER')
+
     if request.method == 'POST':
         try:
             print(url, p_id)
             reviews = HouseRate.objects.get(user__id=request.user.id, product__id=p_id)
+            print(reviews)
             form = HouseRateForm(request.POST, instance=reviews)
-            print(12)
+
             form.save()
             messages.success(request, 'Thank you! Your review has been updated')
             return redirect(reverse_lazy(url))

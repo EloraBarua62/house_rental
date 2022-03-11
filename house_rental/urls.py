@@ -19,6 +19,8 @@ from accounts import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+from accounts.views import review_submit
+
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('frontpage/', views.frontpage, name='frontpage'),
