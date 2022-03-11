@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from .forms import HouseInfoForm, RegistrationForm, SearchForm, HouseRateForm, ShowMapForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from .models import HouseDetails, HouseRate, ShowMap
+from .models import User, HouseDetails, HouseRate, ShowMap
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
 
@@ -236,3 +236,31 @@ def mapview(request):
     }
 
     return render(request, 'map.html', context)
+
+
+def dashboard(request):
+    view = HouseDetails.objects.all()
+    return render(request, 'dashboard.html', {'view': view})
+
+
+# update data from edit page,retrive and save
+def updatedata(request, id):
+    if request.method == 'POST':
+        pi = HouseDetails.objects.get(pk=id)
+        fm = HouseInfoForm(request.POST, instance=pi)
+        if fm.is_valid():
+            fm.save()
+
+    else:
+        pi = HouseDetails.objects.get(pk=id)
+        fm = HouseInfoForm(instance=pi)
+
+    return render(request, 'edit.html', {'form': fm})
+
+
+# delete option create method for index page
+def deletedata(request, id):
+    if request.method == 'POST':
+        pi = HouseDetails.objects.get(pk=id)
+        pi.delete()
+        return HttpResponseRedirect('/')

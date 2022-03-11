@@ -32,6 +32,9 @@ urlpatterns = [
                   path('auto_house/', views.auto_house, name='auto_house'),
                   path('details/<int:pk>/', views.house_details, name='details'),
                   path('submit_review/<int:p_id>/', views.submit_review, name='submit_review'),
+                  path('dashboard/', views.dashboard, name='dashboard'),
+                  path('updatedata/<int:id>/', views.updatedata, name='updatedata'),
+                  path('deletedata/<int:id>/', views.deletedata, name='deletedata'),
                   # path('rate_review/', views.rate_review, name='rate_review'),
 
                   # rating and review's url for js
